@@ -49,7 +49,6 @@
             this.stationLabel = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.runButton = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             this.statusLabel = new System.Windows.Forms.Label();
             this.searchTip = new System.Windows.Forms.ToolTip(this.components);
             this.tableLayoutPanel1.SuspendLayout();
@@ -77,7 +76,6 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(750, 562);
             this.tableLayoutPanel1.TabIndex = 0;
-            this.tableLayoutPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint);
             // 
             // titlePanel
             // 
@@ -191,7 +189,6 @@
             this.settingsLayoutPanel.Controls.Add(this.stationLabel);
             this.settingsLayoutPanel.Controls.Add(this.textBox1);
             this.settingsLayoutPanel.Controls.Add(this.runButton);
-            this.settingsLayoutPanel.Controls.Add(this.button1);
             this.settingsLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.settingsLayoutPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.settingsLayoutPanel.Location = new System.Drawing.Point(601, 57);
@@ -226,16 +223,6 @@
             this.runButton.Text = "Begin Populating";
             this.runButton.UseVisualStyleBackColor = true;
             this.runButton.Click += new System.EventHandler(this.populate_Click);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(3, 71);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // statusLabel
             // 
@@ -294,7 +281,6 @@
     private System.Windows.Forms.Button runButton;
     private System.Windows.Forms.Label statusLabel;
     private System.Windows.Forms.ToolTip searchTip;
-    private System.Windows.Forms.Button button1;
 
   }
 }

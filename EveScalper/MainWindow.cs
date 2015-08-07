@@ -140,18 +140,6 @@ namespace EveScalper
 
             return new Security(name, buy, sell, volume);
         }
-
-        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            string[] testRow = { "one", "two", "three", "four", "five", "six", "seven" };
-            ListViewItem item = new ListViewItem(testRow);
-            this.securitiesListView.Items.Add(item);
-        }
     }
 
 }
