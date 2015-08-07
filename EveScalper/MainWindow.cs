@@ -43,7 +43,7 @@ namespace EveScalper
                 try
                 {
                     EveCentralParameters parameters =
-                        new EveCentralParameters(34, 5, 30000142);
+                        new EveCentralParameters(34253, 5, 10000054);
                     Security security = fetchPrices(parameters);
 
                     Func<double?, string> toCurrency =
@@ -103,10 +103,11 @@ namespace EveScalper
                 (string type) => xml.Descendants(type)
                 .Descendants("order")
                 .Elements("price")
-                .Select(p => double.Parse(p.Value));
+                .Select(p => double.Parse(p.Value))
+                .DefaultIfEmpty(0);
 
-            double? buy = process("buy_orders")?.Max();
-            double? sell = process("sell_orders")?.Min();
+            double buy = process("buy_orders").Max();
+            double sell = process("sell_orders").Min();
 
             //EveMarketParameters parameters2 = new EveMarketParameters()
             String emdUrl = "http://api.eve-marketdata.com/api/item_history2.xml?char_name=demo&region_ids=10000002&type_ids=34";// + id;
