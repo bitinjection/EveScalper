@@ -46,14 +46,28 @@ namespace EveScalper
                         new EveCentralParameters(34253, 5, 10000054);
                     Security security = fetchPrices(parameters);
 
-                    Func<double?, string> toCurrency =
-                        (number) => String.Format("{0:n2}", number) ?? "N/A";
+                    Func<double, string> toCurrency =
+                        (number) => String.Format("{0:n2}", number);
 
-                    string sell = toCurrency(security.Sell);
-                    string buy = toCurrency(security.Buy);
-                    string spread = toCurrency(security.Spread);
-                    string percentage = toCurrency(security.Percentage);
-                    string capitalization = toCurrency(security.Capitalization);
+                    Func<string, string> toEnglish =
+                        (value) => {
+                            // TODO: Make this more robust
+                            if (value == "0.00")
+                                return "None";
+                            else if (value == "NaN")
+                                return "N/A";
+                            else
+                                return value;
+                        };
+
+                    Func<double, string> process =
+                        (number) => toEnglish(toCurrency(number));
+
+                    string sell = process(security.Sell);
+                    string buy = process(security.Buy);
+                    string spread = process(security.Spread);
+                    string percentage = process(security.Percentage);
+                    string capitalization = process(security.Capitalization);
                     string volume = String.Format("{0:n}", security.Volume);
 
                     string[] row = {

@@ -9,17 +9,17 @@ namespace EveScalper
     public class Security
     {
         public readonly string Name;
-        public readonly double? Buy;
-        public readonly double? Sell;
-        public readonly double? Spread;
-        public readonly double? Percentage;
-        public readonly long? Volume;
-        public readonly double? Capitalization;
+        public readonly double Buy;
+        public readonly double Sell;
+        public readonly double Spread;
+        public readonly double Percentage;
+        public readonly long Volume;
+        public readonly double Capitalization;
 
         public Security(string name,
-          double? buy,
-          double? sell,
-          long? volume)
+          double buy,
+          double sell,
+          long volume)
         {
             this.Name = name;
             this.Buy = buy;
@@ -33,11 +33,11 @@ namespace EveScalper
         }
 
         public Security(string name,
-            double? buy,
-            double? sell,
-            double? spread,
-            double? percentage,
-            long? volume,
+            double buy,
+            double sell,
+            double spread,
+            double percentage,
+            long volume,
             double capitalization)
         {
             this.Name = name;
