@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
-using System.Data.SQLite;
 using System.Net;
 using EveScalper;
 
@@ -17,60 +16,34 @@ namespace EveScalper
             InitializeComponent();
         }
 
-        public static IReadOnlyList<int> doSQLStuff(SQLiteConnection connection)
+        private void render(Security security)
         {
-            const string sql = "SELECT typeID FROM invTypes";
-            SQLiteCommand command = new SQLiteCommand(sql, connection);
+            Func<double, string> toCurrency =
+                (number) => String.Format("{0:n2}", number);
 
-            SQLiteDataReader result = command.ExecuteReader();
-
-            List<int> typeIds = new List<int>();
-
-            while (result.Read())
-            {
-                int current = result.GetInt32(0);
-                typeIds.Add(current);
-            }
-            return typeIds.AsReadOnly();
-        }
-
-        private void populate_Click(object send, EventArgs e)
-        {
-            string path = "sqlite-latest.sqlite";
-            using (StaticDataExport data = new StaticDataExport(path))
-            {
-                IReadOnlyList<int> ids = doSQLStuff(data.Connection);
-                try
+            Func<string, string> toEnglish =
+                (value) =>
                 {
-                    EveCentralParameters parameters =
-                        new EveCentralParameters(34253, 5, 10000054);
-                    Security security = fetchPrices(parameters);
+                    // TODO: Make this more robust
+                    if (value == "0.00")
+                        return "None";
+                    else if (value == "NaN")
+                        return "N/A";
+                    else
+                        return value;
+                };
 
-                    Func<double, string> toCurrency =
-                        (number) => String.Format("{0:n2}", number);
+            Func<double, string> process =
+                (number) => toEnglish(toCurrency(number));
 
-                    Func<string, string> toEnglish =
-                        (value) => {
-                            // TODO: Make this more robust
-                            if (value == "0.00")
-                                return "None";
-                            else if (value == "NaN")
-                                return "N/A";
-                            else
-                                return value;
-                        };
+            string sell = process(security.Sell);
+            string buy = process(security.Buy);
+            string spread = process(security.Spread);
+            string percentage = process(security.Percentage);
+            string capitalization = process(security.Capitalization);
+            string volume = String.Format("{0:n}", security.Volume);
 
-                    Func<double, string> process =
-                        (number) => toEnglish(toCurrency(number));
-
-                    string sell = process(security.Sell);
-                    string buy = process(security.Buy);
-                    string spread = process(security.Spread);
-                    string percentage = process(security.Percentage);
-                    string capitalization = process(security.Capitalization);
-                    string volume = String.Format("{0:n}", security.Volume);
-
-                    string[] row = {
+            string[] row = {
                          security.Name,
                          sell,
                          buy,
@@ -80,10 +53,29 @@ namespace EveScalper
                          capitalization
                        };
 
-                    ListViewItem item = new ListViewItem(row);
-                    this.securitiesListView.Items.Add(item);
+            ListViewItem item = new ListViewItem(row);
+            this.securitiesListView.Items.Add(item);
+        }
+
+        private void populate_Click(object send, EventArgs e)
+        {
+            string path = "sqlite-latest.sqlite";
+            using (StaticDataExport data = new StaticDataExport(path))
+            {
+                IReadOnlyList<int> ids = data.inventoryIds();
+                try
+                {
+                    Random generator = new Random(
+                        (int)DateTime.Now.Ticks & 0x0000FFFF);
+                    int item = ids[generator.Next() % ids.Count];
+                    int station = 30000142;
+                    int age = 5;
+                    EveCentralParameters parameters =
+                        new EveCentralParameters(item, age, station);
+                    Security security = fetchPrices(parameters);
+                    render(security);
                 }
-                catch(WebException exception)
+                catch (WebException exception)
                 {
                     MessageBox.Show(exception.Message);
                 }
@@ -105,10 +97,8 @@ namespace EveScalper
                 return XDocument.Parse(client.DownloadString(url.ToString()));
         }
 
-
         private static Security fetchPrices(EveCentralParameters parameters)
         {
-
             XDocument xml = downloadPrices(parameters);
 
             string name = xml.Descendants("itemname").First().Value;
@@ -124,19 +114,22 @@ namespace EveScalper
             double sell = process("sell_orders").Min();
 
             //EveMarketParameters parameters2 = new EveMarketParameters()
-            String emdUrl = "http://api.eve-marketdata.com/api/item_history2.xml?char_name=demo&region_ids=10000002&type_ids=34";// + id;
+            int id = parameters.Id;
+            String emdUrl = "http://api.eve-marketdata.com/api/item_history2.xml?char_name=demo&region_ids=10000002&type_ids=" + id;
             string emdData;
             using (WebClient client = new WebClient())
                 emdData = client.DownloadString(emdUrl);
 
-             XDocument emd = XDocument.Parse(emdData);
+            XDocument emd = XDocument.Parse(emdData);
 
-            long volume = Convert.ToInt64(
-                emd.Descendants("rowset")
+            MessageBox.Show("Trying element " + id);
+                XElement volumeRow = emd.Descendants("rowset")
+                .DefaultIfEmpty()
                 .Descendants("row")
-                .Last()
-                .Attribute("volume")
-                .Value);
+                .LastOrDefault();
+
+            long volume = (volumeRow == null) ?  0 :
+                Convert.ToInt64(volumeRow.Attribute("volume").Value);
 
             return new Security(name, buy, sell, volume);
         }

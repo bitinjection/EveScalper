@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="EveCentralParameters.cs" />
     <Compile Include="EveMarketDataParameters.cs" />
+    <Compile Include="IStaticDataExport.cs" />
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
