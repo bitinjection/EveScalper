@@ -49,6 +49,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoPopulator.cs" />
+    <Compile Include="PriceFetcher.cs" />
+    <Compile Include="RandomWalker.cs" />
     <Compile Include="EveCentralParameters.cs" />
     <Compile Include="EveMarketDataParameters.cs" />
     <Compile Include="IStaticDataExport.cs" />

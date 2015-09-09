@@ -8,6 +8,7 @@ namespace EveScalper
 {
     public class Security
     {
+        public readonly int Id;
         public readonly string Name;
         public readonly double Buy;
         public readonly double Sell;
@@ -16,11 +17,13 @@ namespace EveScalper
         public readonly long Volume;
         public readonly double Capitalization;
 
-        public Security(string name,
-          double buy,
-          double sell,
-          long volume)
+        public Security(int id,
+            string name,
+            double buy,
+            double sell,
+            long volume)
         {
+            this.Id = id;
             this.Name = name;
             this.Buy = buy;
             this.Sell = sell;

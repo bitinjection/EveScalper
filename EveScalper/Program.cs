@@ -6,20 +6,31 @@ using System.Windows.Forms;
 
 namespace EveScalper
 {
-  static class Program
-  {
-    /// <summary>
-    /// The main entry point for the application.
-    /// </summary>
-    [STAThread]
-    static void Main()
+    static class Program
     {
-      Application.EnableVisualStyles();
-      Application.SetCompatibleTextRenderingDefault(false);
-      
-      Form main = new mainWindow();
+        /// <summary>
+        /// The main entry point for the application.
+        /// </summary>
+        [STAThread]
+        static void Main()
+        {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
 
-      Application.Run(main);
+            IList<Security> securities = new List<Security>();
+
+            IStaticDataExport database =
+                new StaticDataExport("sqlite-latest.sqlite");
+
+            IReadOnlyList<int> ids = database.inventoryIds();
+
+            RandomWalker walker = new RandomWalker(new List<int>(ids));
+
+            PriceFetcher fetcher = new PriceFetcher(walker);
+
+            Form main = new mainWindow(fetcher);
+
+            Application.Run(main);
+        }
     }
-  }
 }

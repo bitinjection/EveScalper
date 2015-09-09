@@ -26,7 +26,8 @@ namespace EveScalper
         public IReadOnlyList<int> inventoryIds()
         {
             {
-                const string sql = "SELECT typeID FROM invTypes WHERE invTypes.published = 1";
+                const string sql =
+                    "SELECT typeID FROM invTypes WHERE invTypes.published = 1";
                 SQLiteCommand command = new SQLiteCommand(sql, this.connection);
 
                 SQLiteDataReader result = command.ExecuteReader();
