@@ -235,6 +235,7 @@
             // 
             // systemList
             // 
+            this.systemList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.systemList.FormattingEnabled = true;
             this.systemList.Location = new System.Drawing.Point(3, 16);
             this.systemList.Name = "systemList";

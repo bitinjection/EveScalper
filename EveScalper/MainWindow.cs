@@ -74,22 +74,32 @@ namespace EveScalper
         {
             if (false == this.populating)
             {
+                this.beginPopulating();
+            }
+            else
+            {
+                this.stopPopulating();
+            }
+        }
+
+        private void beginPopulating()
+        {
                 this.populating = true;
                 this.populator.start();
                 this.populator.OnSecurityUpdate += addSecurity;
                 this.statusLabel.Text =
                     "Populating securities...";
                 this.runButton.Text = "Stop Populating";
-            }
-            else
-            {
+        }
+
+        private void stopPopulating()
+        {
                 this.populating = false;
                 this.populator.stop();
                 this.populator.OnSecurityUpdate -= addSecurity;
                 this.statusLabel.Text =
                     "\"Begin Populating\" to populate securities";
                 this.runButton.Text = "Begin Populating";
-            }
         }
 
         private void addSecurity(object o, SecurityArgs securityArguments)
