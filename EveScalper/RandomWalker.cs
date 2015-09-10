@@ -30,6 +30,7 @@ namespace EveScalper
         {
             int randomNumber = 0;
 
+            // Restart if done
             if (this.max == 0)
             {
                 this.max = this.ids.Count;
@@ -38,7 +39,6 @@ namespace EveScalper
             randomNumber = this.randomNumberGenerator.Next() % this.max;
             this.max--;
 
-            // Swap
             int temporary = this.ids[max];
             this.ids[max] = this.ids[randomNumber];
             this.ids[randomNumber] = temporary;

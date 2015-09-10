@@ -28,7 +28,13 @@ namespace EveScalper
 
             PriceFetcher fetcher = new PriceFetcher(walker);
 
-            Form main = new mainWindow(fetcher);
+            AutoPopulator populator = new AutoPopulator(fetcher,
+                30000142,
+                5,
+                30000);
+            populator.setup();
+
+            Form main = new mainWindow(populator);
 
             Application.Run(main);
         }

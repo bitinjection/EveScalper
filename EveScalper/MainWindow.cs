@@ -3,18 +3,21 @@ using System.Xml.Linq;
 using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
+using System.ComponentModel;
 
 namespace EveScalper
 {
     public partial class mainWindow : Form
     {
-        private readonly PriceFetcher fetcher;
+        private readonly AutoPopulator populator;
+        private bool populating;
 
-        public mainWindow(PriceFetcher fetcher)
+        public mainWindow(AutoPopulator populator)
         {
             InitializeComponent();
 
-            this.fetcher = fetcher;
+            this.populator = populator;
+            this.populating = false;
         }
 
         private void render(Security security)
@@ -63,8 +66,23 @@ namespace EveScalper
             int station = 30000142;
             int age = 5;
 
-            Security security = this.fetcher.grabRandomItem(station, age);
-            render(security);
+            if (false == this.populating)
+            {
+                this.populating = true;
+                this.populator.start();
+                this.populator.OnSecurityUpdate += addSecurity;
+            }
+            else
+            {
+                this.populating = false;
+                this.populator.stop();
+                this.populator.OnSecurityUpdate -= addSecurity;
+            }
+        }
+
+        private void addSecurity(object o, SecurityArgs securityArguments)
+        {
+            render(securityArguments.security);
         }
 
     }
