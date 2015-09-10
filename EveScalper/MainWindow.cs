@@ -27,6 +27,7 @@ namespace EveScalper
             {
                 this.systemList.Items.Add(system.Item1);
             }
+            this.systemList.SelectedIndex = 0;
         }
 
         private void render(Security security)
