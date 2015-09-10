@@ -10,14 +10,23 @@ namespace EveScalper
     public partial class mainWindow : Form
     {
         private readonly AutoPopulator populator;
+        private IReadOnlyList<Tuple<string, int>> systems;
         private bool populating;
 
-        public mainWindow(AutoPopulator populator)
+
+        public mainWindow(AutoPopulator populator,
+            IReadOnlyList<Tuple<string, int>> systems)
         {
             InitializeComponent();
 
             this.populator = populator;
+            this.systems = systems;
             this.populating = false;
+
+            foreach(Tuple<string, int> system in systems)
+            {
+                this.systemList.Items.Add(system.Item1);
+            }
         }
 
         private void render(Security security)
@@ -63,20 +72,23 @@ namespace EveScalper
 
         private void populate_Click(object send, EventArgs e)
         {
-            int station = 30000142;
-            int age = 5;
-
             if (false == this.populating)
             {
                 this.populating = true;
                 this.populator.start();
                 this.populator.OnSecurityUpdate += addSecurity;
+                this.statusLabel.Text =
+                    "Populating securities...";
+                this.runButton.Text = "Stop Populating";
             }
             else
             {
                 this.populating = false;
                 this.populator.stop();
                 this.populator.OnSecurityUpdate -= addSecurity;
+                this.statusLabel.Text =
+                    "\"Begin Populating\" to populate securities";
+                this.runButton.Text = "Begin Populating";
             }
         }
 
@@ -84,7 +96,6 @@ namespace EveScalper
         {
             render(securityArguments.security);
         }
-
     }
 
 }

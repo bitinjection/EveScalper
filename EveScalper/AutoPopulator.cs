@@ -57,7 +57,6 @@ namespace EveScalper
             }
         }
 
-        // I should stop trying to make fetch happen
         public void fetch(object o, EventArgs e)
         {
             this.mostRecent = fetcher.grabRandomItem(this.station, this.age);
@@ -70,10 +69,10 @@ namespace EveScalper
             if (true == this.running)
             {
                 this.running = false;
+                this.worker.DoWork -= this.fetch;
+                this.worker.RunWorkerCompleted -= notifyFinished;
             }
         }
-
-
     }
 
     public class SecurityArgs : EventArgs

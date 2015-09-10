@@ -4,6 +4,8 @@ using System.Data.SQLite;
 
 namespace EveScalper
 {
+    using SystemPair = Tuple<string, int>;
+
     class StaticDataExport : IDisposable, IStaticDataExport
     {
         private readonly string path;
@@ -21,6 +23,32 @@ namespace EveScalper
             string parameters = @"Data Source=" + path + ";Version=3";
             this.connection = new SQLiteConnection(parameters);
             this.connection.Open();
+        }
+
+        public IReadOnlyList<SystemPair> systemList()
+        {
+            const string sql =
+                @"SELECT DISTINCT
+                solarSystemName, mapSolarSystems.solarSystemId
+                FROM mapSolarSystems, staStations
+                WHERE mapSolarSystems.solarSystemID = staStations.solarSystemID
+                ORDER BY solarSystemName";
+
+            SQLiteCommand command = new SQLiteCommand(sql, this.connection);
+
+            SQLiteDataReader result = command.ExecuteReader();
+
+            List<SystemPair> systems = new List<SystemPair>();
+
+            while(result.Read())
+            {
+                systems.Add(
+                    new SystemPair(
+                        result["solarSystemName"].ToString(),
+                        Convert.ToInt32(result["solarSystemId"])));
+            }
+
+            return systems.AsReadOnly();
         }
 
         public IReadOnlyList<int> inventoryIds()

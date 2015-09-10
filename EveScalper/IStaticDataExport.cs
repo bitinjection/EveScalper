@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.SQLite;
 
 namespace EveScalper
@@ -9,5 +10,6 @@ namespace EveScalper
 
         void Dispose();
         IReadOnlyList<int> inventoryIds();
+        IReadOnlyList<Tuple<string, int>> systemList();
     }
 }

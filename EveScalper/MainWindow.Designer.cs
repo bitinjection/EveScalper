@@ -47,10 +47,10 @@
             this.marketCapitalization = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.settingsLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.stationLabel = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.runButton = new System.Windows.Forms.Button();
             this.statusLabel = new System.Windows.Forms.Label();
             this.searchTip = new System.Windows.Forms.ToolTip(this.components);
+            this.systemList = new System.Windows.Forms.ComboBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.titlePanel.SuspendLayout();
             this.titleLayoutPanel.SuspendLayout();
@@ -147,6 +147,7 @@
             this.spreadPercentage,
             this.marketCapitalization});
             this.securitiesListView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.securitiesListView.FullRowSelect = true;
             this.securitiesListView.Location = new System.Drawing.Point(0, 0);
             this.securitiesListView.Name = "securitiesListView";
             this.securitiesListView.Size = new System.Drawing.Size(585, 488);
@@ -157,6 +158,7 @@
             // security
             // 
             this.security.Text = "Security";
+            this.security.Width = 220;
             // 
             // ask
             // 
@@ -187,7 +189,7 @@
             // settingsLayoutPanel
             // 
             this.settingsLayoutPanel.Controls.Add(this.stationLabel);
-            this.settingsLayoutPanel.Controls.Add(this.textBox1);
+            this.settingsLayoutPanel.Controls.Add(this.systemList);
             this.settingsLayoutPanel.Controls.Add(this.runButton);
             this.settingsLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.settingsLayoutPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
@@ -202,21 +204,14 @@
             this.stationLabel.AutoSize = true;
             this.stationLabel.Location = new System.Drawing.Point(3, 0);
             this.stationLabel.Name = "stationLabel";
-            this.stationLabel.Size = new System.Drawing.Size(40, 13);
+            this.stationLabel.Size = new System.Drawing.Size(41, 13);
             this.stationLabel.TabIndex = 0;
-            this.stationLabel.Text = "Station";
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(3, 16);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 1;
+            this.stationLabel.Text = "System";
             // 
             // runButton
             // 
             this.runButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.runButton.Location = new System.Drawing.Point(3, 42);
+            this.runButton.Location = new System.Drawing.Point(3, 43);
             this.runButton.Name = "runButton";
             this.runButton.Size = new System.Drawing.Size(100, 23);
             this.runButton.TabIndex = 2;
@@ -237,6 +232,14 @@
             // searchTip
             // 
             this.searchTip.ToolTipTitle = "Search for Security";
+            // 
+            // systemList
+            // 
+            this.systemList.FormattingEnabled = true;
+            this.systemList.Location = new System.Drawing.Point(3, 16);
+            this.systemList.Name = "systemList";
+            this.systemList.Size = new System.Drawing.Size(121, 21);
+            this.systemList.TabIndex = 3;
             // 
             // mainWindow
             // 
@@ -277,11 +280,10 @@
     private System.Windows.Forms.ColumnHeader marketCapitalization;
     private System.Windows.Forms.FlowLayoutPanel settingsLayoutPanel;
     private System.Windows.Forms.Label stationLabel;
-    private System.Windows.Forms.TextBox textBox1;
     private System.Windows.Forms.Button runButton;
     private System.Windows.Forms.Label statusLabel;
     private System.Windows.Forms.ToolTip searchTip;
-
-  }
+        private System.Windows.Forms.ComboBox systemList;
+    }
 }
 

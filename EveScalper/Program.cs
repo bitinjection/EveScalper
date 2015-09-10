@@ -6,6 +6,8 @@ using System.Windows.Forms;
 
 namespace EveScalper
 {
+    using SystemPair = Tuple<string, int>;
+
     static class Program
     {
         /// <summary>
@@ -23,6 +25,7 @@ namespace EveScalper
                 new StaticDataExport("sqlite-latest.sqlite");
 
             IReadOnlyList<int> ids = database.inventoryIds();
+            IReadOnlyList<SystemPair> systems = database.systemList();
 
             RandomWalker walker = new RandomWalker(new List<int>(ids));
 
@@ -34,7 +37,7 @@ namespace EveScalper
                 30000);
             populator.setup();
 
-            Form main = new mainWindow(populator);
+            Form main = new mainWindow(populator, systems);
 
             Application.Run(main);
         }
