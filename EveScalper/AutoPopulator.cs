@@ -49,6 +49,7 @@ namespace EveScalper
         {
             SecurityArgs eventArguments = new SecurityArgs(this.mostRecent);
             this.OnSecurityUpdate(this, eventArguments);
+
             if(true == this.running)
             {
                 this.worker.RunWorkerAsync();

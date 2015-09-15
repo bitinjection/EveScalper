@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Xml.Linq;
 using System.Collections.Generic;
 using System.Data;
@@ -8,13 +9,14 @@ using System.ComponentModel;
 namespace EveScalper
 {
     using PopulatorFactory = Func<int, int, int, IPopulator>;
+    using SystemPair = Tuple<string, int>;
+
     public partial class mainWindow : Form
     {
         private readonly PopulatorFactory populatorFactory;
         private IPopulator populator;
-        private IReadOnlyList<Tuple<string, int>> systems;
+        private IReadOnlyList<SystemPair> systems;
         private bool populating;
-
 
         public mainWindow(PopulatorFactory populatorFactory,
             IReadOnlyList<Tuple<string, int>> systems)
@@ -87,7 +89,11 @@ namespace EveScalper
 
         private void beginPopulating()
         {
-            this.populator = this.populatorFactory(30000142,
+            SystemPair station = this.systems
+                .Where((pair) => pair.Item1 == this.systemList.Text)
+                .First();
+
+            this.populator = this.populatorFactory(station.Item2,
                 5,      // Defaulting to 5 hours for now
                 30000); // Defaulting to 30 seconds because 3rd party APIs
                         // Don't know how to set limits...
@@ -96,7 +102,9 @@ namespace EveScalper
             this.populator.start();
             this.populator.OnSecurityUpdate += addSecurity;
             this.statusLabel.Text =
-                "Populating securities...";
+                "Populating securities from " 
+                + station.Item1 
+                + " (" + station.Item2 + ")";
             this.runButton.Text = "Stop Populating";
         }
 
