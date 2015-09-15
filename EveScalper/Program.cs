@@ -31,13 +31,17 @@ namespace EveScalper
 
             PriceFetcher fetcher = new PriceFetcher(walker);
 
-            AutoPopulator populator = new AutoPopulator(fetcher,
-                30000142,
-                5,
-                30000);
-            populator.setup();
-
-            Form main = new mainWindow(populator, systems);
+            // Improve the clarity of this actually-simple task...
+            Func<PriceFetcher, Func<int, int, int, IPopulator>>
+                populatorFactory = (f) =>
+                (s, a, d) =>
+                {
+                    IPopulator pop = new AutoPopulator(f, s, a, d);
+                    pop.setup();
+                    return pop;
+                };
+            
+            Form main = new mainWindow(populatorFactory(fetcher), systems);
 
             Application.Run(main);
         }

@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.ComponentModel;
 using System.Threading;
 
 namespace EveScalper
 {
-    public class AutoPopulator
+    public class AutoPopulator : IPopulator
     {
         public event EventHandler<SecurityArgs> OnSecurityUpdate;
 
@@ -17,6 +16,14 @@ namespace EveScalper
         private BackgroundWorker worker;
 
         private Security mostRecent;
+
+        public static IPopulator create(PriceFetcher fetcher,
+            int station,
+            int age,
+            int delay)
+        {
+            return new AutoPopulator(fetcher, station, age, delay);
+        }
 
         public AutoPopulator(PriceFetcher fetcher,
             int station,

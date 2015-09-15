@@ -7,23 +7,25 @@ using System.ComponentModel;
 
 namespace EveScalper
 {
+    using PopulatorFactory = Func<int, int, int, IPopulator>;
     public partial class mainWindow : Form
     {
-        private readonly AutoPopulator populator;
+        private readonly PopulatorFactory populatorFactory;
+        private IPopulator populator;
         private IReadOnlyList<Tuple<string, int>> systems;
         private bool populating;
 
 
-        public mainWindow(AutoPopulator populator,
+        public mainWindow(PopulatorFactory populatorFactory,
             IReadOnlyList<Tuple<string, int>> systems)
         {
             InitializeComponent();
 
-            this.populator = populator;
+            this.populatorFactory = populatorFactory;
             this.systems = systems;
             this.populating = false;
 
-            foreach(Tuple<string, int> system in systems)
+            foreach (Tuple<string, int> system in systems)
             {
                 this.systemList.Items.Add(system.Item1);
             }
@@ -85,22 +87,27 @@ namespace EveScalper
 
         private void beginPopulating()
         {
-                this.populating = true;
-                this.populator.start();
-                this.populator.OnSecurityUpdate += addSecurity;
-                this.statusLabel.Text =
-                    "Populating securities...";
-                this.runButton.Text = "Stop Populating";
+            this.populator = this.populatorFactory(30000142,
+                5,      // Defaulting to 5 hours for now
+                30000); // Defaulting to 30 seconds because 3rd party APIs
+                        // Don't know how to set limits...
+
+            this.populating = true;
+            this.populator.start();
+            this.populator.OnSecurityUpdate += addSecurity;
+            this.statusLabel.Text =
+                "Populating securities...";
+            this.runButton.Text = "Stop Populating";
         }
 
         private void stopPopulating()
         {
-                this.populating = false;
-                this.populator.stop();
-                this.populator.OnSecurityUpdate -= addSecurity;
-                this.statusLabel.Text =
-                    "\"Begin Populating\" to populate securities";
-                this.runButton.Text = "Begin Populating";
+            this.populating = false;
+            this.populator.stop();
+            this.populator.OnSecurityUpdate -= addSecurity;
+            this.statusLabel.Text =
+                "\"Begin Populating\" to populate securities";
+            this.runButton.Text = "Begin Populating";
         }
 
         private void addSecurity(object o, SecurityArgs securityArguments)

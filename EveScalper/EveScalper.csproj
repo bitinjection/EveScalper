@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoPopulator.cs" />
+    <Compile Include="IPopulator.cs" />
     <Compile Include="PriceFetcher.cs" />
     <Compile Include="RandomWalker.cs" />
     <Compile Include="EveCentralParameters.cs" />
