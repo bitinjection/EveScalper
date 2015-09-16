@@ -18,6 +18,13 @@ namespace EveScalper
         private IReadOnlyList<SystemPair> systems;
         private bool populating;
 
+        private static string runningButtonText = "Stop Populating";
+        private static string stoppedButtonText = "Start Populating";
+        private static string runningStatusMessage =
+            "Populating items for {0} ({1})";
+        private static string stoppedStatusMessage =
+            "Click " + stoppedButtonText + " to start";
+
         public mainWindow(PopulatorFactory populatorFactory,
             IReadOnlyList<Tuple<string, int>> systems)
         {
@@ -104,10 +111,10 @@ namespace EveScalper
             this.populator.start();
             this.populator.OnSecurityUpdate += addSecurity;
             this.statusLabel.Text =
-                "Populating securities from " 
-                + station.Item1 
-                + " (" + station.Item2 + ")";
-            this.runButton.Text = "Stop Populating";
+                String.Format(runningStatusMessage,
+                station.Item1,
+                station.Item2);
+            this.runButton.Text = runningButtonText;
         }
 
         private void stopPopulating()
@@ -115,9 +122,8 @@ namespace EveScalper
             this.populating = false;
             this.populator.stop();
             this.populator.OnSecurityUpdate -= addSecurity;
-            this.statusLabel.Text =
-                "\"Begin Populating\" to populate securities";
-            this.runButton.Text = "Begin Populating";
+            this.statusLabel.Text = stoppedButtonText;
+            this.runButton.Text = stoppedStatusMessage;
         }
 
         private void addSecurity(object o, SecurityArgs securityArguments)

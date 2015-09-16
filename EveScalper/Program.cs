@@ -10,6 +10,7 @@ namespace EveScalper
 
     static class Program
     {
+        private static string databaseFile = "sqlite-latest.sqlite";
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -22,7 +23,7 @@ namespace EveScalper
             IList<Security> securities = new List<Security>();
 
             IGameData database =
-                new StaticDataExport("sqlite-latest.sqlite");
+                new StaticDataExport(databaseFile);
 
             IReadOnlyList<int> ids = database.inventoryIds();
             IReadOnlyList<SystemPair> systems = database.systemList();
