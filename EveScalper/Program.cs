@@ -27,9 +27,10 @@ namespace EveScalper
             IReadOnlyList<int> ids = database.inventoryIds();
             IReadOnlyList<SystemPair> systems = database.systemList();
 
-            RandomWalker walker = new RandomWalker(new List<int>(ids));
+            IPriceWalker walker = new RandomWalker(new List<int>(ids));
 
-            PriceFetcher fetcher = new PriceFetcher(walker);
+            PriceFetcher fetcher = new PriceFetcher(walker,
+                EveCentralParameters.downloadPrices);
 
             // Improve the clarity of this actually-simple task...
             Func<PriceFetcher, Func<int, int, int, IPopulator>>
