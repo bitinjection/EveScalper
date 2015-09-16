@@ -6,7 +6,7 @@ namespace EveScalper
 {
     using SystemPair = Tuple<string, int>;
 
-    class StaticDataExport : IDisposable, IGameData
+    public class StaticDataExport : IDisposable, IGameData
     {
         private readonly string path;
         private readonly SQLiteConnection connection;

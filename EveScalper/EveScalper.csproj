@@ -50,12 +50,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoPopulator.cs" />
+    <Compile Include="EveMarketUtility.cs" />
     <Compile Include="IPopulator.cs" />
     <Compile Include="IPriceFetcher.cs" />
     <Compile Include="IPriceWalker.cs" />
     <Compile Include="PriceFetcher.cs" />
     <Compile Include="RandomWalker.cs" />
-    <Compile Include="EveCentralParameters.cs" />
+    <Compile Include="EveCentralUtility.cs" />
     <Compile Include="IGameData.cs" />
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>

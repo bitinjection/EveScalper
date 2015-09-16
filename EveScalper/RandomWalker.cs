@@ -25,16 +25,15 @@ namespace EveScalper
             this.max = this.ids.Count;
         }
 
+        public int remainingIds()
+        {
+            return this.max;
+        }
+
         // Precondition: List must not be empty
         public int pick()
         {
             int randomNumber = 0;
-
-            // Restart if done
-            if (this.max == 0)
-            {
-                this.max = this.ids.Count;
-            }
 
             randomNumber = this.randomNumberGenerator.Next() % this.max;
             this.max--;
@@ -43,7 +42,15 @@ namespace EveScalper
             this.ids[max] = this.ids[randomNumber];
             this.ids[randomNumber] = temporary;
 
-            return this.ids.ElementAt(max);
+            int result = this.ids.ElementAt(max);
+
+            // Restart if done
+            if (this.max == 0)
+            {
+                this.max = this.ids.Count;
+            }
+
+            return result;
         }
 
         public void reset()

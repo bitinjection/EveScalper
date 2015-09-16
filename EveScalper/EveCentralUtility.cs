@@ -5,20 +5,20 @@ using System.Linq;
 
 namespace EveScalper
 {
-    public class EveCentralParameters
+    public class EveCentralUtility
     {
         public readonly int Id;
         public readonly int Hours;
         public readonly int System;
 
-        public EveCentralParameters(int id, int hours, int system)
+        public EveCentralUtility(int id, int hours, int system)
         {
             this.Id = id;
             this.Hours = hours;
             this.System = system;
         }
 
-        public static XDocument downloadPrices(EveCentralParameters parameters)
+        public static XDocument downloadPrices(EveCentralUtility parameters)
         {
             UriBuilder url = new UriBuilder();
             url.Scheme = "http";

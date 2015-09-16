@@ -30,16 +30,16 @@ namespace EveScalper
             IPriceWalker walker = new RandomWalker(new List<int>(ids));
 
             PriceFetcher fetcher = new PriceFetcher(walker,
-                EveCentralParameters.downloadPrices);
+                EveCentralUtility.downloadPrices,
+                EveMarketUtility.fetchVolume);
 
-            // Improve the clarity of this actually-simple task...
             Func<PriceFetcher, Func<int, int, int, IPopulator>>
                 populatorFactory = (f) =>
                 (s, a, d) =>
                 {
-                    IPopulator pop = new AutoPopulator(f, s, a, d);
-                    pop.setup();
-                    return pop;
+                    IPopulator populator = new AutoPopulator(f, s, a, d);
+                    populator.setup();
+                    return populator;
                 };
             
             Form main = new mainWindow(populatorFactory(fetcher), systems);

@@ -7,22 +7,28 @@ using System.Xml.Linq;
 
 namespace EveScalper
 {
-    using PriceDownloader = Func<EveCentralParameters, XDocument>;
+    using PriceDownloader = Func<EveCentralUtility, XDocument>;
+    using VolumeDownloader = Func<int, long>;
 
     public class PriceFetcher : IPriceFetcher
     {
 
         private readonly IPriceWalker walker;
         private readonly PriceDownloader downloadPrices;
+        private readonly VolumeDownloader downloadVolume;
 
-        public PriceFetcher(IPriceWalker walker, PriceDownloader downloadPrices)
+        public PriceFetcher(IPriceWalker walker,
+            PriceDownloader downloadPrices,
+            VolumeDownloader downloadVolume)
         {
             this.walker = walker;
             this.downloadPrices = downloadPrices;
+            this.downloadVolume = downloadVolume;
         }
 
-        private static Security fetchPrices(EveCentralParameters parameters,
-            PriceDownloader downloadPrices)
+        public static Security fetchPrices(EveCentralUtility parameters,
+            PriceDownloader downloadPrices,
+            VolumeDownloader downloadVolume)
         {
             XDocument xml = downloadPrices(parameters);
 
@@ -40,31 +46,11 @@ namespace EveScalper
 
             int id = parameters.Id;
 
-            long volume = fetchVolume(id);
+            long volume = downloadVolume(id);
 
             return new Security(id, name, buy, sell, volume);
         }
 
-        private static long fetchVolume(int id)
-        {
-            String emdUrl = "http://api.eve-marketdata.com/api/item_history2.xml?char_name=demo&region_ids=10000002&type_ids=" + id;
-            using (WebClient client = new WebClient())
-            {
-                string emdData = client.DownloadString(emdUrl);
-
-                XDocument emd = XDocument.Parse(emdData);
-
-                XElement volumeRow = emd.Descendants("rowset")
-                .DefaultIfEmpty()
-                .Descendants("row")
-                .LastOrDefault();
-
-                long volume = (volumeRow == null) ? 0 :
-                    Convert.ToInt64(volumeRow.Attribute("volume").Value);
-
-                return volume;
-            }
-        }
 
 
         public Security grabRandomItem(int station, int age)
@@ -78,15 +64,18 @@ namespace EveScalper
         {
             try
             {
-                EveCentralParameters parameters =
-                    new EveCentralParameters(id, age, station);
-                Security security = fetchPrices(parameters, this.downloadPrices);
+                EveCentralUtility parameters =
+                    new EveCentralUtility(id, age, station);
+                Security security = fetchPrices(parameters,
+                    this.downloadPrices,
+                    this.downloadVolume);
                 return security;
             }
             catch (WebException exception)
             {
+                // TODO: Recover from this
                 MessageBox.Show(exception.Message);
-                return null; // Not planning to recover from this
+                return null; 
             }
         }
     }

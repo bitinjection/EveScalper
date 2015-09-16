@@ -9,6 +9,8 @@ namespace EveScalper
     public interface IPopulator
     {
         event EventHandler<SecurityArgs> OnSecurityUpdate;
+        bool Running { get; }
+        Security MostRecent { get; }
 
         void setup();
         void start();

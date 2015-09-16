@@ -7,17 +7,16 @@ namespace EveScalper
     public class AutoPopulator : IPopulator
     {
         public event EventHandler<SecurityArgs> OnSecurityUpdate;
+        public bool Running { get; private set; }
+        public Security MostRecent { get; private set; }
 
-        private bool running;
-        private readonly PriceFetcher fetcher;
+        private readonly IPriceFetcher fetcher;
         private readonly int station;
         private readonly int age;
         private readonly int delay;
         private BackgroundWorker worker;
 
-        private Security mostRecent;
-
-        public static IPopulator create(PriceFetcher fetcher,
+        public static IPopulator create(IPriceFetcher fetcher,
             int station,
             int age,
             int delay)
@@ -25,12 +24,12 @@ namespace EveScalper
             return new AutoPopulator(fetcher, station, age, delay);
         }
 
-        public AutoPopulator(PriceFetcher fetcher,
+        public AutoPopulator(IPriceFetcher fetcher,
             int station,
             int age,
             int delay)
         {
-            this.running = false;
+            this.Running = false;
             this.fetcher = fetcher;
             this.station = station;
             this.age = age;
@@ -47,10 +46,10 @@ namespace EveScalper
 
         private void notifyFinished(object o, EventArgs e)
         {
-            SecurityArgs eventArguments = new SecurityArgs(this.mostRecent);
+            SecurityArgs eventArguments = new SecurityArgs(this.MostRecent);
             this.OnSecurityUpdate(this, eventArguments);
 
-            if(true == this.running)
+            if(true == this.Running)
             {
                 this.worker.RunWorkerAsync();
             }
@@ -58,25 +57,25 @@ namespace EveScalper
 
         public void start()
         {
-            if (false == this.running)
+            if (false == this.Running)
             {
-                this.running = true;
+                this.Running = true;
                 this.worker.RunWorkerAsync();
             }
         }
 
         public void fetch(object o, EventArgs e)
         {
-            this.mostRecent = fetcher.grabRandomItem(this.station, this.age);
+            this.MostRecent = fetcher.grabRandomItem(this.station, this.age);
 
             Thread.Sleep(this.delay);
         }
 
         public void stop()
         {
-            if (true == this.running)
+            if (true == this.Running)
             {
-                this.running = false;
+                this.Running = false;
                 this.worker.DoWork -= this.fetch;
                 this.worker.RunWorkerCompleted -= notifyFinished;
             }
