@@ -97,6 +97,8 @@ namespace EveScalper
                 5,      // Defaulting to 5 hours for now
                 30000); // Defaulting to 30 seconds because 3rd party APIs
                         // Don't know how to set limits...
+                        // These are not constants because they will likely be
+                        // user defined in the very near future.
 
             this.populating = true;
             this.populator.start();

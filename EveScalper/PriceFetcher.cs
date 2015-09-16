@@ -7,18 +7,24 @@ using System.Xml.Linq;
 
 namespace EveScalper
 {
-    public class PriceFetcher
-    {
-        private readonly RandomWalker walker;
+    using PriceDownloader = Func<EveCentralParameters, XDocument>;
 
-        public PriceFetcher(RandomWalker walker)
+    public class PriceFetcher : IPriceFetcher
+    {
+
+        private readonly IPriceWalker walker;
+        private readonly PriceDownloader downloadPrices;
+
+        public PriceFetcher(IPriceWalker walker, PriceDownloader downloadPrices)
         {
             this.walker = walker;
+            this.downloadPrices = downloadPrices;
         }
 
-        private static Security fetchPrices(EveCentralParameters parameters)
+        private static Security fetchPrices(EveCentralParameters parameters,
+            PriceDownloader downloadPrices)
         {
-            XDocument xml = EveCentralParameters.downloadPrices(parameters);
+            XDocument xml = downloadPrices(parameters);
 
             string name = xml.Descendants("itemname").First().Value;
 
@@ -74,7 +80,7 @@ namespace EveScalper
             {
                 EveCentralParameters parameters =
                     new EveCentralParameters(id, age, station);
-                Security security = fetchPrices(parameters);
+                Security security = fetchPrices(parameters, this.downloadPrices);
                 return security;
             }
             catch (WebException exception)

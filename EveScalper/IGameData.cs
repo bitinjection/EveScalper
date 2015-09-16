@@ -4,7 +4,7 @@ using System.Data.SQLite;
 
 namespace EveScalper
 {
-    interface IStaticDataExport
+    public interface IGameData
     {
         SQLiteConnection Connection { get; }
 

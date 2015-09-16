@@ -11,7 +11,7 @@ namespace EveScalper
     // But if any other code alters the length of the list
     // things will break...
     // Defensive copy maybe? Eh.. maybe.
-    public class RandomWalker
+    public class RandomWalker : IPriceWalker
     {
         private IList<int> ids;
         private int max;

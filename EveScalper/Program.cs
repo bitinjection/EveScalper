@@ -21,7 +21,7 @@ namespace EveScalper
 
             IList<Security> securities = new List<Security>();
 
-            IStaticDataExport database =
+            IGameData database =
                 new StaticDataExport("sqlite-latest.sqlite");
 
             IReadOnlyList<int> ids = database.inventoryIds();

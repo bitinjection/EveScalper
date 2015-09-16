@@ -1,6 +1,0 @@
-﻿namespace EveScalper
-{
-    class EveMarketDataParameters
-    {
-    }
-}
